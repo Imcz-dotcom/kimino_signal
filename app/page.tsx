@@ -3,6 +3,8 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 import { BACKGROUND_URLS } from "@/lib/story-config";
 import { Navigation } from "./components/Navigation";
+import { TitleCard } from "./components/TitleCard";
+import { SetupModal } from "./components/SetupModal";
 
 function seededRandom(seed: number): number {
   const x = Math.sin(seed) * 10000;
@@ -61,15 +63,9 @@ const AyanoSprite = ({ isNarrator }: { isNarrator: boolean }) => {
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src="image-removebg-preview.png"
+        src="/partner.png"
         alt="Anime Character"
         className="w-full h-full object-contain animate-breathe drop-shadow-2xl"
-        onError={(e) => {
-          const target = e.target as HTMLImageElement;
-          target.onerror = null;
-          target.src =
-            "https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=400&q=80";
-        }}
       />
     </div>
   );
@@ -291,8 +287,10 @@ const STORY_DATA: Record<string, SceneData> = {
 };
 
 const TitleScreen = ({ onStart }: { onStart: () => void }) => {
+  const [showModal, setShowModal] = useState(false);
+
   const navItems = [
-    { id: "game", title: "Start", subtitle: "START", onClick: onStart },
+    { id: "game", title: "Start", subtitle: "START", onClick: () => setShowModal(true) },
     { id: "characters", title: "Partner", subtitle: "PARTNER", onClick: () => console.log("characters") },
     { id: "saves", title: "Saves", subtitle: "SAVES", onClick: () => console.log("saves") },
     { id: "gallery", title: "arXiv", subtitle: "DISCOVER", onClick: () => console.log("gallery") },
@@ -305,24 +303,43 @@ const TitleScreen = ({ onStart }: { onStart: () => void }) => {
     <div className="relative w-full h-screen flex overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 bg-[url('https://wallpapercave.com/wp/wp3738698.jpg')] bg-cover bg-center z-0"></div>
-      
+
       {/* Sakura Particles */}
       <SakuraParticles />
-      
-      {/* Title Section - Outside Sidebar */}
-      <div className="absolute top-12 left-12 z-40">
-        <h1 className="text-5xl font-bold text-pink-100 drop-shadow-lg" style={{ fontFamily: 'Dancing Script' }}>
-          kimi no signal
-        </h1>
-        <p className="text-sm text-pink-200 drop-shadow font-light tracking-wider mt-2" style={{ fontFamily: 'Nunito' }}>
-          恋愛 &amp; 紙で飛んだ青春物語
-        </p>
+
+      {/* Center Area - Character Sprite */}
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[400px] h-[600px] md:w-[500px] md:h-[750px] pointer-events-none z-20">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/partner.png"
+          alt="Partner"
+          className="w-full h-full object-contain animate-breathe drop-shadow-[0_0_25px_rgba(255,183,178,0.4)]"
+        />
       </div>
 
-      {/* Left Sidebar - Navigation */}
-      <div className="relative w-72 z-30 flex-shrink-0 flex flex-col mt-40">
-        <Navigation items={navItems} />
+      {/* Left Area - Title & Navigation */}
+      <div className="relative z-30 flex flex-col items-start pl-8 md:pl-16 pt-8 md:pt-12 h-full overflow-y-auto no-scrollbar pb-12 w-full max-w-3xl pointer-events-none">
+
+        {/* Title Section (On Top) */}
+        <div className="z-40 mb-8 shrink-0 pointer-events-auto">
+          <TitleCard />
+        </div>
+
+        {/* Navigation Section */}
+        <div className="relative w-[400px] shrink-0 flex-1 flex flex-col pointer-events-auto">
+          <Navigation items={navItems} />
+        </div>
       </div>
+
+      {/* Start Modal */}
+      <SetupModal 
+        isOpen={showModal} 
+        onClose={() => setShowModal(false)} 
+        onStart={(data) => {
+          console.log("Setup Data:", data);
+          onStart();
+        }} 
+      />
     </div>
   );
 };
@@ -388,7 +405,7 @@ const GameEngine = ({ onRestart }: { onRestart: () => void }) => {
 
     let i = 0;
     const fullText = lineData.text;
-    
+
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setDisplayedText("");
     setIsTyping(true);
@@ -432,11 +449,10 @@ const GameEngine = ({ onRestart }: { onRestart: () => void }) => {
         {[1, 2, 3, 4, 5].map((level) => (
           <svg
             key={level}
-            className={`w-6 h-6 transition-colors duration-500 ${
-              affection >= level
+            className={`w-6 h-6 transition-colors duration-500 ${affection >= level
                 ? "text-pink-500 drop-shadow-[0_0_8px_rgba(236,72,153,0.8)]"
                 : "text-gray-400"
-            }`}
+              }`}
             fill="currentColor"
             viewBox="0 0 24 24"
           >
@@ -448,11 +464,10 @@ const GameEngine = ({ onRestart }: { onRestart: () => void }) => {
       <div className="absolute top-6 right-6 z-40 flex space-x-4">
         <button
           onClick={() => setAutoMode(!autoMode)}
-          className={`px-4 py-2 rounded-full backdrop-blur-md border font-bold text-sm transition-all ${
-            autoMode
+          className={`px-4 py-2 rounded-full backdrop-blur-md border font-bold text-sm transition-all ${autoMode
               ? "bg-pink-500/80 border-pink-300 text-white shadow-[0_0_15px_rgba(236,72,153,0.5)]"
               : "bg-black/30 border-white/20 text-gray-200 hover:bg-white/20"
-          }`}
+            }`}
         >
           AUTO
         </button>
