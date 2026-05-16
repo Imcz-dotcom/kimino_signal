@@ -6,7 +6,7 @@ interface CharacterModalProps {
   onClose: () => void;
   onSelect: (url: string) => void;
   currentCharacterUrl: string;
-}
+};
 
 const PRESET_CHARACTERS = [
   { id: "ayano", name: "Ayano", url: "/partner.png" },
