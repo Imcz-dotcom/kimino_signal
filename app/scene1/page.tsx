@@ -5,20 +5,36 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { BACKGROUND_URLS } from "@/lib/story-config";
 import { SakuraParticles } from "../components/SakuraParticles";
 
-const AyanoSprite = ({ isNarrator, charUrl }: { isNarrator: boolean, charUrl: string }) => {
+const CharacterSprite = ({ isNarrator, charUrl, mood }: { isNarrator: boolean, charUrl: string, mood: string }) => {
+  let currentImage = charUrl;
+  let isLeBron = charUrl.includes("lebron");
+
+  if (charUrl === "/partner.png") {
+    if (mood === "smile" || mood === "happy") currentImage = "/ayano_smile.png";
+    else if (mood === "sad") currentImage = "/ayano_sad.png";
+  } else if (isLeBron) {
+    if (mood === "sad") currentImage = "/lebron_sad.png";
+    else if (mood === "smile" || mood === "happy") currentImage = "/lebron_happy.png";
+  }
+
   const opacityClass = isNarrator
     ? "opacity-40 scale-95 translate-y-8 blur-[2px]"
     : "opacity-100 scale-100 translate-y-0 filter drop-shadow-[0_0_20px_rgba(255,183,178,0.3)]";
 
+  const sizeClass = isLeBron 
+    ? "w-[400px] h-[500px] md:w-[550px] md:h-[650px]"
+    : "w-[350px] h-[450px] md:w-[450px] md:h-[550px]";
+
   return (
     <div
-      className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-[350px] h-[450px] md:w-[450px] md:h-[550px] transition-all duration-700 ease-in-out ${opacityClass} pointer-events-none z-20`}
+      className={`absolute bottom-0 left-1/2 -translate-x-1/2 ${sizeClass} transition-all duration-700 ease-in-out ${opacityClass} pointer-events-none z-20`}
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src={charUrl || "/partner.png"}
-        alt="Anime Character"
-        className="w-full h-full object-contain animate-breathe drop-shadow-2xl"
+        key={currentImage}
+        src={currentImage || "/partner.png"}
+        alt="Character"
+        className="w-full h-full object-contain animate-breathe drop-shadow-2xl transition-opacity duration-300"
       />
     </div>
   );
@@ -44,9 +60,9 @@ interface SceneData {
   next?: string;
 }
 
-const STORY_DATA: Record<string, SceneData> = {
+const AYANO_STORY_DATA: Record<string, SceneData> = {
   intro: {
-    bg: BACKGROUND_URLS.digital_city,
+    bg: BACKGROUND_URLS.school_yard,
     script: [
       {
         speaker: "",
@@ -70,7 +86,7 @@ const STORY_DATA: Record<string, SceneData> = {
     ],
   },
   web3_expert: {
-    bg: BACKGROUND_URLS.cyber_cafe,
+    bg: BACKGROUND_URLS.library,
     script: [
       { speaker: "Ayano", text: "Correct! Unlike Web2, we aren't just the product anymore. We own our data and assets.", mood: "happy" },
       { speaker: "Ayano", text: "Look at my wallet—it's my gateway to everything here. But security is on us now.", mood: "neutral" },
@@ -86,7 +102,7 @@ const STORY_DATA: Record<string, SceneData> = {
     ],
   },
   web3_noob: {
-    bg: BACKGROUND_URLS.cyber_cafe,
+    bg: BACKGROUND_URLS.school_yard,
     script: [
       { speaker: "Ayano", text: "Not quite... Web2 is centralized, like Google or Facebook. Web3 is decentralized.", mood: "sad" },
       { speaker: "Ayano", text: "It uses Distributed Ledger Technology—blockchain—to remove the middlemen.", mood: "neutral" },
@@ -94,14 +110,14 @@ const STORY_DATA: Record<string, SceneData> = {
     ],
   },
   wallet_setup: {
-    bg: BACKGROUND_URLS.digital_city,
+    bg: BACKGROUND_URLS.school_yard,
     script: [
       { speaker: "Ayano", text: "First, you download the extension, write down your 12-word seed phrase... and NEVER share it!", mood: "serious" },
       { speaker: "Ayano", text: "Okay, you're all set! Now you have a digital identity. But wait... look at this.", mood: "neutral", next: "web3_expert" },
     ],
   },
   security_win: {
-    bg: BACKGROUND_URLS.neon_street,
+    bg: BACKGROUND_URLS.library,
     script: [
       { speaker: "Ayano", text: "Phew! I'm glad you're careful. In 2024 alone, $2.1 billion was lost to hacks and scams.", mood: "smile" },
       { speaker: "Ayano", text: "Since you're so smart, how about we try 'GameFi'? We can play to earn some NFTs!", mood: "happy" },
@@ -117,7 +133,7 @@ const STORY_DATA: Record<string, SceneData> = {
     ],
   },
   scalability_win: {
-    bg: BACKGROUND_URLS.game_center,
+    bg: BACKGROUND_URLS.rooftop,
     script: [
       { speaker: "Ayano", text: "Smart choice! Layer-2 solutions like Rollups make things so much smoother.", mood: "happy" },
       { speaker: "Ayano", text: "We're actually earning assets that we truly own. This is the power of a trustless system.", mood: "smile" },
@@ -131,7 +147,7 @@ const STORY_DATA: Record<string, SceneData> = {
     ],
   },
   scam_ending: {
-    bg: BACKGROUND_URLS.glitch_void,
+    bg: BACKGROUND_URLS.library,
     script: [
       { speaker: "Ayano", text: "No! Your private keys were compromised!", mood: "surprised" },
       { speaker: "Ayano", text: "Everything in your wallet is gone... and there's no 'Forgot Password' in Web3.", mood: "sad" },
@@ -144,7 +160,7 @@ const STORY_DATA: Record<string, SceneData> = {
     ],
   },
   high_fees: {
-    bg: BACKGROUND_URLS.busy_market,
+    bg: BACKGROUND_URLS.cafe,
     script: [
       { speaker: "Ayano", text: "Ugh, the transaction is taking forever and the fees cost more than the prize...", mood: "angry" },
       { speaker: "Ayano", text: "This is the 'Blockchain Trilemma' in action. Scalability is still a hurdle.", mood: "sad" },
@@ -153,10 +169,95 @@ const STORY_DATA: Record<string, SceneData> = {
   },
 };
 
+const LEBRON_STORY_DATA: Record<string, SceneData> = {
+  intro: {
+    bg: BACKGROUND_URLS.locker_room,
+    script: [
+      { speaker: "", text: "The sounds of a bouncing ball echo through the high-tech training facility. The King is waiting.", mood: "neutral" },
+      { speaker: "LeBron", text: "Ay, young blood! Glad you could make it to the facility. We ain't just talking hoops today, we talking Legacy.", mood: "smile" },
+      { speaker: "LeBron", text: "The game is changing. We moving from the 'Read-Write' era to 'Read-Write-Own.' That's Web3.", mood: "serious" },
+      {
+        speaker: "LeBron",
+        text: "You ready to be the owner of your data, or you just wanna stay on the bench and let the tech giants run the plays?",
+        mood: "determined",
+        choices: [
+          { text: "I'm ready to own my game, King!", next: "ownership", affection: 1 },
+          { text: "Wait, isn't this just another app?", next: "bench", affection: -1 },
+        ],
+      },
+    ],
+  },
+  ownership: {
+    bg: BACKGROUND_URLS.office,
+    script: [
+      { speaker: "LeBron", text: "That's what I like to hear! In this league, decentralization is the MVP. No central authority, just the community.", mood: "happy" },
+      { speaker: "LeBron", text: "We use smart contracts—code that executes itself like a perfect fast break. No middleman needed.", mood: "neutral" },
+      {
+        speaker: "LeBron",
+        text: "Now, defense wins championships. Someone DMs you a 'free NFT' link. You jumping for that block or holding your ground?",
+        mood: "serious",
+        choices: [
+          { text: "Check the URL and verify the dApp.", next: "defense_win", affection: 2 },
+          { text: "Click it fast, don't want to miss the drop!", next: "scammed", affection: -5 },
+        ],
+      },
+    ],
+  },
+  bench: {
+    bg: BACKGROUND_URLS.locker_room,
+    script: [
+      { speaker: "LeBron", text: "Nah, man. Web2 is where the big companies own your highlights. In Web3, you tokenize your skill.", mood: "sad" },
+      { speaker: "LeBron", text: "It's about 'Self-Custody.' You're the GM of your own assets. Don't be a spectator.", mood: "neutral", next: "ownership" },
+    ],
+  },
+  defense_win: {
+    bg: BACKGROUND_URLS.arena,
+    script: [
+      { speaker: "LeBron", text: "Solid defense! Most losses come from 'access control exploits.' You gotta guard your private keys like the rock in Game 7.", mood: "happy" },
+      { speaker: "LeBron", text: "Now let's talk offense. We can hit the DeFi markets for some yield farming, or jump into GameFi and earn while we play.", mood: "smile" },
+      {
+        speaker: "LeBron",
+        text: "The network is getting crowded. Do we stay on Layer-1 or move to a Layer-2 solution to save on gas?",
+        mood: "neutral",
+        choices: [
+          { text: "Layer-2! Efficiency is key.", next: "championship", affection: 1 },
+          { text: "Layer-1! I trust the mainnet only.", next: "gas_trap", affection: 0 },
+        ],
+      },
+    ],
+  },
+  championship: {
+    bg: BACKGROUND_URLS.trophy_room,
+    script: [
+      { speaker: "LeBron", text: "Strive for Greatness! Layer-2 is how we scale this game for the masses.", mood: "happy" },
+      { speaker: "LeBron", text: "You’ve got the tools now: Wallets, DeFi, and the security mindset. You’re a starter now.", mood: "smile" },
+      { speaker: "LeBron", text: "Just remember: keep that Secret Recovery Phrase offline. That's the playbook. Don't lose it.", mood: "serious" },
+      { speaker: "", text: "The King hands you a tokenized championship ring. Your journey in the decentralized world has just begun.", mood: "neutral", next: "CREDITS" },
+    ],
+  },
+  gas_trap: {
+    bg: BACKGROUND_URLS.arena,
+    script: [
+      { speaker: "LeBron", text: "Man, those gas fees just blocked your shot. We gotta look at scalability if we wanna win big.", mood: "sad" },
+      { speaker: "LeBron", text: "Let's regroup and look at some Sharding or Layer-2 solutions next time.", mood: "neutral", next: "CREDITS" },
+    ],
+  },
+  scammed: {
+    bg: BACKGROUND_URLS.locker_room,
+    script: [
+      { speaker: "LeBron", text: "Young blood... you just got posterized by a phishing scam.", mood: "surprised" },
+      { speaker: "LeBron", text: "In this game, if you lose your keys, there ain't no refs to call a foul. Your assets are gone.", mood: "sad" },
+      { speaker: "", text: "The King shakes his head. You need more time in the lab. Watch those official links next time.", mood: "neutral", next: "CREDITS" },
+    ],
+  },
+};
+
 function Scene1Content() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const charUrl = searchParams.get("charUrl") || "/partner.png";
+  const isLeBron = charUrl.includes("lebron");
+  const STORY_DATA = isLeBron ? LEBRON_STORY_DATA : AYANO_STORY_DATA;
 
   const [currentScene, setCurrentScene] = useState("intro");
   const [lineIndex, setLineIndex] = useState(0);
@@ -301,7 +402,7 @@ function Scene1Content() {
         />
       )}
 
-      <AyanoSprite isNarrator={isNarrator} charUrl={charUrl} />
+      <CharacterSprite isNarrator={isNarrator} charUrl={charUrl} mood={lineData.mood || "neutral"} />
 
       {!uiHidden && !lineData.choices && (
         <div className="absolute inset-0 z-20 cursor-pointer" onClick={handleAdvance} />
@@ -321,7 +422,7 @@ function Scene1Content() {
             className="glass-panel rounded-[2rem] p-8 md:p-10 min-h-[180px] cursor-pointer"
             onClick={handleAdvance}
           >
-            <p className="text-xl md:text-2xl text-white font-medium leading-relaxed drop-shadow-md">
+            <p className="text-xl md:text-2xl text-white font-bold leading-relaxed drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] tracking-wide">
               {displayedText}
             </p>
 
