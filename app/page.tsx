@@ -7,6 +7,7 @@ import { TitleCard } from "./components/TitleCard";
 import { SetupModal } from "./components/SetupModal";
 import { SakuraParticles } from "./components/SakuraParticles";
 import { CharacterModal } from "./components/CharacterModal";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 export default function TitleScreen() {
   const router = useRouter();
@@ -26,6 +27,11 @@ export default function TitleScreen() {
 
   return (
     <div className="relative w-full h-screen flex overflow-hidden">
+      {/* Wallet Connect Button - Top Right */}
+      <div className="absolute top-6 right-6 z-50 pointer-events-auto">
+        <ConnectButton />
+      </div>
+
       {/* Background */}
       <div className="absolute inset-0 bg-[url('https://wallpapercave.com/wp/wp3738698.jpg')] bg-cover bg-center z-0"></div>
 
