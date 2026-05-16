@@ -25,7 +25,7 @@ const monadTestnet = {
 
 const config = getDefaultConfig({
   appName: "Kimino Signal",
-  projectId: "d42fa0e6689d0bd1f8b1cc1233af8b98", // Public dummy project ID for testing
+  projectId: process.env.NEXT_PUBLIC_REOWN_PROJECT_ID || "d42fa0e6689d0bd1f8b1cc1233af8b98",
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   chains: [monadTestnet as any],
   ssr: true,

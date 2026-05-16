@@ -464,44 +464,54 @@ function Scene1Content() {
       
       {/* End Card Overlay */}
       {showEndCard && (
-        <div className="absolute inset-0 z-[100] bg-black flex flex-col items-center justify-center animate-fadeIn overflow-hidden">
-          {/* Full Screen Image Background */}
-          <div className="absolute inset-0 w-full h-full">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img 
-              src={isLeBron ? "/endingscene2.png" : "/endingscene1.png"} 
-              alt="Happy Ending" 
-              className="w-full h-full object-contain animate-fadeIn"
-            />
-            {/* Dark gradient overlay for readability */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/40" />
-          </div>
-
-          {/* Content Overlay */}
-          <div className="relative z-10 flex flex-col items-center justify-between h-full py-16 md:py-24 px-4 text-center">
-            <div className="space-y-4">
-              <p className="text-pink-300 font-bold tracking-[0.5em] uppercase text-sm md:text-lg animate-fadeInUp">
-                CHAPTER FINALE
-              </p>
-              <h2 className="text-5xl md:text-8xl text-white font-black italic tracking-tighter drop-shadow-[0_0_30px_rgba(255,255,255,0.3)] animate-fadeInUp delay-100">
-                {isLeBron ? "LEGACY SECURED" : "PARADIGM SHIFTED"}
-              </h2>
-            </div>
+        <div className="absolute inset-0 z-[100] bg-black/90 backdrop-blur-2xl flex flex-col items-center justify-center animate-fadeIn p-4 md:p-8">
+          {/* Main Card Container */}
+          <div className="relative group max-w-5xl w-full aspect-[16/10] animate-fadeInUp">
+            {/* Outer Glow / Aura */}
+            <div className="absolute -inset-1 bg-gradient-to-r from-pink-500 via-rose-400 to-amber-300 rounded-[2.5rem] blur-2xl opacity-50 animate-pulse" />
             
-            <div className="flex flex-col items-center space-y-8">
-              <div className="w-24 h-1 bg-gradient-to-r from-transparent via-white/50 to-transparent" />
-              <button
-                onClick={() => router.push("/")}
-                className="group relative px-16 py-6 overflow-hidden rounded-full transition-all hover:scale-110 active:scale-95"
-              >
-                <div className="absolute inset-0 bg-gradient-to-r from-pink-600 to-rose-500 transition-all group-hover:scale-110" />
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-[radial-gradient(circle,white_0%,transparent_70%)] transition-opacity" />
-                <span className="relative z-10 text-white font-black text-2xl tracking-[0.2em]">
-                  RETURN TO TITLE
-                </span>
-              </button>
+            {/* The Card Frame */}
+            <div className="relative h-full w-full bg-black rounded-[2.5rem] p-4 md:p-6 border-4 border-white/20 shadow-2xl overflow-hidden flex flex-col">
+              
+              {/* Image Container with Inner Border */}
+              <div className="relative flex-1 w-full overflow-hidden rounded-[1.5rem] border-2 border-white/10">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img 
+                  src={isLeBron ? "/endingscene2.png" : "/endingscene1.png"} 
+                  alt="Happy Ending" 
+                  className="w-full h-full object-cover"
+                />
+                
+                {/* Overlay for the image */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
+                
+                {/* Stamp / Badge */}
+                <div className="absolute top-6 right-6 px-4 py-1 bg-white/20 backdrop-blur-md border border-white/30 rounded-full text-[10px] font-black tracking-[0.3em] text-white uppercase">
+                  LEGENDARY CARD
+                </div>
+              </div>
+
+              {/* Card Footer Section */}
+              <div className="pt-6 pb-2 text-center">
+                <p className="text-pink-300 font-bold tracking-[0.5em] uppercase text-xs mb-2">
+                  CHAPTER FINALE ACHIEVED
+                </p>
+                <h2 className="text-4xl md:text-6xl text-white font-black italic tracking-tighter drop-shadow-2xl">
+                  {isLeBron ? "LEGACY SECURED" : "PARADIGM SHIFTED"}
+                </h2>
+              </div>
             </div>
           </div>
+          
+          <button
+            onClick={() => router.push("/")}
+            className="mt-12 group relative px-16 py-5 overflow-hidden rounded-full transition-all hover:scale-110 active:scale-95"
+          >
+            <div className="absolute inset-0 bg-gradient-to-r from-pink-600 to-rose-500 transition-all group-hover:scale-110" />
+            <span className="relative z-10 text-white font-black text-xl tracking-[0.2em]">
+              RETURN TO TITLE
+            </span>
+          </button>
         </div>
       )}
     </div>

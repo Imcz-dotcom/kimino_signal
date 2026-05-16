@@ -129,7 +129,7 @@ export const CharacterModal = ({ isOpen, onClose, onSelect, currentCharacterUrl 
       const abi = [
         "function registerCharacter(address to, string memory ipfsURI) public"
       ];
-      const contract = new Contract("0x6d10A01197564EcBCF826F292E0995c8476EBC64", abi, signer);
+      const contract = new Contract("0x206B6bD31afc7C0f35298DA9D7dBF61944b67159", abi, signer);
 
       // Trigger wallet popup
       const tx = await contract.registerCharacter(userAddress, realIpfsUri);
