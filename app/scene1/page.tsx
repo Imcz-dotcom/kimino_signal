@@ -267,6 +267,7 @@ function Scene1Content() {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [uiHidden, setUiHidden] = useState(false);
   const [autoMode, setAutoMode] = useState(false);
+  const [showEndCard, setShowEndCard] = useState(false);
 
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -304,7 +305,11 @@ function Scene1Content() {
     if (lineData.choices) return;
 
     if (lineData.next === "CREDITS") {
-      router.push("/");
+      if (currentScene === "scalability_win" || currentScene === "championship") {
+        setShowEndCard(true);
+      } else {
+        router.push("/");
+      }
       return;
     }
 
@@ -454,6 +459,49 @@ function Scene1Content() {
               {choice.text}
             </button>
           ))}
+        </div>
+      )}
+      
+      {/* End Card Overlay */}
+      {showEndCard && (
+        <div className="absolute inset-0 z-[100] bg-black flex flex-col items-center justify-center animate-fadeIn overflow-hidden">
+          {/* Full Screen Image Background */}
+          <div className="absolute inset-0 w-full h-full">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img 
+              src={isLeBron ? "/endingscene2.png" : "/endingscene1.png"} 
+              alt="Happy Ending" 
+              className="w-full h-full object-contain animate-fadeIn"
+            />
+            {/* Dark gradient overlay for readability */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/40" />
+          </div>
+
+          {/* Content Overlay */}
+          <div className="relative z-10 flex flex-col items-center justify-between h-full py-16 md:py-24 px-4 text-center">
+            <div className="space-y-4">
+              <p className="text-pink-300 font-bold tracking-[0.5em] uppercase text-sm md:text-lg animate-fadeInUp">
+                CHAPTER FINALE
+              </p>
+              <h2 className="text-5xl md:text-8xl text-white font-black italic tracking-tighter drop-shadow-[0_0_30px_rgba(255,255,255,0.3)] animate-fadeInUp delay-100">
+                {isLeBron ? "LEGACY SECURED" : "PARADIGM SHIFTED"}
+              </h2>
+            </div>
+            
+            <div className="flex flex-col items-center space-y-8">
+              <div className="w-24 h-1 bg-gradient-to-r from-transparent via-white/50 to-transparent" />
+              <button
+                onClick={() => router.push("/")}
+                className="group relative px-16 py-6 overflow-hidden rounded-full transition-all hover:scale-110 active:scale-95"
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-pink-600 to-rose-500 transition-all group-hover:scale-110" />
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-[radial-gradient(circle,white_0%,transparent_70%)] transition-opacity" />
+                <span className="relative z-10 text-white font-black text-2xl tracking-[0.2em]">
+                  RETURN TO TITLE
+                </span>
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>

@@ -9,4 +9,6 @@ export const BACKGROUND_URLS = {
   arena: "/bg_arena.png",
   office: "/bg_office.png",
   trophy_room: "/bg_trophy_room.png",
+  ayano_ending: "/endingscene1.png",
+  lebron_ending: "/endingscene2.png",
 } as const;
