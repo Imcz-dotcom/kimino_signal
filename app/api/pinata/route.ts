@@ -42,7 +42,6 @@ export async function POST(req: NextRequest) {
     }
 
     const imageData = await imageRes.json();
-    const imageIpfsHash = `ipfs://${imageData.IpfsHash}`;
     const imageGatewayUrl = `https://gateway.pinata.cloud/ipfs/${imageData.IpfsHash}`;
 
     // 2. Construct ERC721 Metadata JSON
