@@ -1,7 +1,6 @@
 import React, { useState, useRef } from "react";
 
 export interface SetupData {
-  characterImage: File | null;
   storyPdf: File | null;
   backgroundId: string;
 }
@@ -19,17 +18,15 @@ const BACKGROUNDS = [
 ];
 
 export const SetupModal = ({ isOpen, onClose, onStart }: SetupModalProps) => {
-  const [characterImage, setCharacterImage] = useState<File | null>(null);
   const [storyPdf, setStoryPdf] = useState<File | null>(null);
   const [backgroundId, setBackgroundId] = useState<string>("bg1");
 
-  const charInputRef = useRef<HTMLInputElement>(null);
   const pdfInputRef = useRef<HTMLInputElement>(null);
 
   if (!isOpen) return null;
 
   const handleStart = () => {
-    onStart({ characterImage, storyPdf, backgroundId });
+    onStart({ storyPdf, backgroundId });
   };
 
   return (
@@ -50,33 +47,9 @@ export const SetupModal = ({ isOpen, onClose, onStart }: SetupModalProps) => {
         </div>
 
         <div className="flex flex-col gap-6">
-          {/* Character Upload */}
-          <div className="space-y-2">
-            <label className="block text-sm font-bold text-slate-700 uppercase tracking-wider">1. Partner Character Image</label>
-            <div 
-              onClick={() => charInputRef.current?.click()}
-              className="border-2 border-dashed border-pink-300 hover:border-pink-500 hover:bg-pink-50/50 transition-colors rounded-2xl p-6 text-center cursor-pointer flex flex-col items-center justify-center min-h-[120px]"
-            >
-              <input 
-                type="file" 
-                ref={charInputRef} 
-                accept="image/*" 
-                className="hidden" 
-                onChange={(e) => setCharacterImage(e.target.files?.[0] || null)}
-              />
-              {characterImage ? (
-                <div className="text-pink-600 font-medium">Selected: {characterImage.name}</div>
-              ) : (
-                <div className="text-slate-500">
-                  <span className="text-pink-500 font-semibold">Click to upload</span> or drag and drop character image
-                </div>
-              )}
-            </div>
-          </div>
-
           {/* PDF Upload */}
           <div className="space-y-2">
-            <label className="block text-sm font-bold text-slate-700 uppercase tracking-wider">2. Story Script (PDF)</label>
+            <label className="block text-sm font-bold text-slate-700 uppercase tracking-wider">1. Story Script (PDF)</label>
             <div 
               onClick={() => pdfInputRef.current?.click()}
               className="border-2 border-dashed border-blue-300 hover:border-blue-500 hover:bg-blue-50/50 transition-colors rounded-2xl p-6 text-center cursor-pointer flex flex-col items-center justify-center min-h-[120px]"
@@ -100,7 +73,7 @@ export const SetupModal = ({ isOpen, onClose, onStart }: SetupModalProps) => {
 
           {/* Background Selection */}
           <div className="space-y-2">
-            <label className="block text-sm font-bold text-slate-700 uppercase tracking-wider">3. Starting Scene Background</label>
+            <label className="block text-sm font-bold text-slate-700 uppercase tracking-wider">2. Starting Scene Background</label>
             <div className="grid grid-cols-3 gap-4">
               {BACKGROUNDS.map((bg) => (
                 <div 
