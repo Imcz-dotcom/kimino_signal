@@ -284,8 +284,9 @@ function Scene1Content() {
   };
 
   const handleChoice = (choice: Choice) => {
-    if (choice.affection) {
-      setAffection((prev) => Math.max(0, Math.min(5, prev + choice.affection)));
+    const { affection } = choice;
+    if (affection !== undefined) {
+      setAffection((prev) => Math.max(0, Math.min(5, prev + affection)));
     }
     if (choice.next) {
       transitionToScene(choice.next);
