@@ -9,11 +9,12 @@ interface CharacterModalProps {
 
 const PRESET_CHARACTERS = [
   { id: "ayano", name: "Ayano", url: "/partner.png" },
-  { id: "lebron", name: "LeBron James", url: "https://a.espncdn.com/combiner/i?img=/i/headshots/nba/players/full/1966.png" },
+  { id: "lebron", name: "LeBron James", url: "/lebron_custom.png" },
 ];
 
 export const CharacterModal = ({ isOpen, onClose, onSelect, currentCharacterUrl }: CharacterModalProps) => {
   const [characterImage, setCharacterImage] = useState<File | string | null>(currentCharacterUrl);
+  const [showUploadModal, setShowUploadModal] = useState(false);
   const charInputRef = useRef<HTMLInputElement>(null);
 
   if (!isOpen) return null;
@@ -69,26 +70,17 @@ export const CharacterModal = ({ isOpen, onClose, onSelect, currentCharacterUrl 
 
           <div className="text-center text-slate-400 text-xs font-bold tracking-widest my-4">- OR UPLOAD CUSTOM -</div>
 
-          {/* Custom Upload */}
+          {/* Open Upload Modal Button */}
           <div 
-            onClick={() => charInputRef.current?.click()}
-            className={`border-2 border-dashed transition-colors rounded-2xl p-6 text-center cursor-pointer flex flex-col items-center justify-center min-h-[120px]
+            onClick={() => setShowUploadModal(true)}
+            className={`border-2 border-dashed transition-colors rounded-2xl p-4 text-center cursor-pointer flex flex-col items-center justify-center
               ${characterImage instanceof File ? 'border-pink-500 bg-pink-50' : 'border-pink-300 hover:border-pink-500 hover:bg-pink-50/50'}`}
           >
-            <input 
-              type="file" 
-              ref={charInputRef} 
-              accept="image/*" 
-              className="hidden" 
-              onChange={(e) => {
-                if (e.target.files?.[0]) setCharacterImage(e.target.files[0]);
-              }}
-            />
             {characterImage instanceof File ? (
               <div className="text-pink-600 font-medium">Selected: {characterImage.name}</div>
             ) : (
-              <div className="text-slate-500 text-sm">
-                <span className="text-pink-500 font-semibold">Click to upload</span> or drag and drop character image
+              <div className="text-pink-500 font-bold uppercase tracking-wide">
+                + Upload Character
               </div>
             )}
           </div>
@@ -109,6 +101,47 @@ export const CharacterModal = ({ isOpen, onClose, onSelect, currentCharacterUrl 
           </button>
         </div>
       </div>
+
+      {/* Nested Upload Modal */}
+      {showUploadModal && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 backdrop-blur-sm animate-in fade-in duration-200 p-4">
+          <div className="bg-white rounded-[2rem] p-8 max-w-md w-full shadow-2xl flex flex-col gap-6 animate-in zoom-in-95">
+            <div className="text-center">
+              <h3 className="text-2xl font-extrabold text-slate-700 mb-1" style={{ fontFamily: '"Nunito", sans-serif' }}>Upload Character</h3>
+              <p className="text-slate-500 text-sm">Select an image file from your device</p>
+            </div>
+            
+            <div 
+              onClick={() => charInputRef.current?.click()}
+              className="border-2 border-dashed transition-colors rounded-2xl p-6 text-center cursor-pointer flex flex-col items-center justify-center min-h-[160px] border-pink-300 hover:border-pink-500 hover:bg-pink-50/50 group"
+            >
+              <input 
+                type="file" 
+                ref={charInputRef} 
+                accept="image/*" 
+                className="hidden" 
+                onChange={(e) => {
+                  if (e.target.files?.[0]) {
+                    setCharacterImage(e.target.files[0]);
+                    setShowUploadModal(false);
+                  }
+                }}
+              />
+              <div className="text-slate-500 text-sm group-hover:scale-105 transition-transform">
+                <span className="text-pink-500 font-bold block text-lg mb-2">Click to upload</span>
+                or drag and drop character image
+              </div>
+            </div>
+
+            <button 
+              onClick={() => setShowUploadModal(false)}
+              className="py-3 px-6 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-2xl font-bold transition-all"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
