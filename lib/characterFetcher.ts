@@ -42,7 +42,7 @@ export async function fetchCharacterMetadata(contractAddress: `0x${string}`, tok
     // Step 2 & 4: Protocol String Replacement (turning raw coordinate into navigable highway)
     let fetchUrl = rawUri;
     if (rawUri.startsWith('ipfs://')) {
-      fetchUrl = rawUri.replace('ipfs://', 'https://your-subdomain.mypinata.cloud/ipfs/');
+      fetchUrl = rawUri.replace('ipfs://', 'https://gateway.pinata.cloud/ipfs/');
     }
 
     // Step 3: Fetch with revalidate - Server-side cache for 3600 seconds (1 hour)

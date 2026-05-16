@@ -11,7 +11,7 @@ contract CharacterRegistry is ERC721URIStorage, Ownable {
     constructor() ERC721("CharacterRegistry", "CHAR") Ownable(msg.sender) {}
 
     // Executes the minting loop, safely mints to student's address, and sets IPFS URI.
-    function registerCharacter(address to, string memory ipfsURI) public onlyOwner {
+    function registerCharacter(address to, string memory ipfsURI) public {
         _currentTokenId++;
         uint256 newId = _currentTokenId;
         
