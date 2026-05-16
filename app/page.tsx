@@ -18,9 +18,7 @@ export default function TitleScreen() {
   const navItems = [
     { id: "game", title: "Start", subtitle: "START", onClick: () => setShowModal(true) },
     { id: "characters", title: "Partner", subtitle: "PARTNER", onClick: () => setShowCharModal(true) },
-    { id: "saves", title: "Saves", subtitle: "SAVES", onClick: () => console.log("saves") },
-    { id: "gallery", title: "arXiv", subtitle: "DISCOVER", onClick: () => console.log("gallery") },
-    { id: "music", title: "Workshop", subtitle: "WORKSHOP", onClick: () => console.log("music") },
+    { id: "music", title: "Workshop", subtitle: "WORKSHOP", onClick: () => router.push("/community") },
     { id: "settings", title: "Settings", subtitle: "CONFIG", onClick: () => console.log("settings") },
     { id: "credits", title: "Community & Author", subtitle: "COMMUNITY", onClick: () => console.log("credits") },
   ];

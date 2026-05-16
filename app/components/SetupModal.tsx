@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+import { BACKGROUND_URLS } from "@/lib/story-config";
 
 export interface SetupData {
   storyPdf: File | null;
@@ -12,9 +13,9 @@ interface SetupModalProps {
 }
 
 const BACKGROUNDS = [
-  { id: "bg1", name: "Classroom", preview: "https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=200" },
-  { id: "bg2", name: "City Night", preview: "https://images.unsplash.com/photo-1514565131-fce0801e5785?w=200" },
-  { id: "bg3", name: "Cherry Blossoms", preview: "https://images.unsplash.com/photo-1522383225653-ed111181a951?w=200" },
+  { id: "bg1", name: "Classroom", preview: BACKGROUND_URLS.classroom },
+  { id: "bg2", name: "Arena", preview: BACKGROUND_URLS.arena },
+  { id: "bg3", name: "Random", preview: "https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=200" },
 ];
 
 export const SetupModal = ({ isOpen, onClose, onStart }: SetupModalProps) => {
